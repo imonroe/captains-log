@@ -1,0 +1,304 @@
+/* LCARS-inspired styling */
+:root {
+  --lcars-black: #000000;
+  --lcars-blue: #5599ff;
+  --lcars-orange: #ff9900;
+  --lcars-yellow: #ffcc00;
+  --lcars-pink: #ff88aa;
+  --lcars-tan: #ffcc99;
+  --lcars-lilac: #cc99cc;
+  --lcars-radius: 20px;
+  --lcars-button-height: 50px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  background-color: var(--lcars-black);
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.lcars-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header styling */
+.lcars-header {
+  display: flex;
+  height: 70px;
+  margin-bottom: 20px;
+}
+
+.lcars-title {
+  flex-grow: 1;
+  background-color: var(--lcars-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--lcars-black);
+  letter-spacing: 2px;
+}
+
+.lcars-corner {
+  width: 70px;
+  height: 70px;
+}
+
+.top-left {
+  background-color: var(--lcars-orange);
+  border-top-left-radius: var(--lcars-radius);
+  margin-right: 20px;
+}
+
+.top-right {
+  background-color: var(--lcars-orange);
+  border-top-right-radius: var(--lcars-radius);
+  margin-left: 20px;
+}
+
+/* Main content styling */
+.lcars-main {
+  display: flex;
+  flex-grow: 1;
+  margin-bottom: 20px;
+}
+
+.lcars-sidebar {
+  width: 150px;
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.lcars-button {
+  height: var(--lcars-button-height);
+  background-color: var(--lcars-blue);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: var(--lcars-black);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.lcars-button:hover {
+  background-color: var(--lcars-yellow);
+}
+
+.lcars-button.active {
+  background-color: var(--lcars-orange);
+}
+
+.lcars-content {
+  flex-grow: 1;
+  background-color: #222;
+  border-radius: var(--lcars-radius);
+  padding: 20px;
+  position: relative;
+}
+
+/* Footer styling */
+.lcars-footer {
+  display: flex;
+  height: 50px;
+}
+
+.bottom-left {
+  background-color: var(--lcars-blue);
+  border-bottom-left-radius: var(--lcars-radius);
+  margin-right: 20px;
+}
+
+.bottom-right {
+  background-color: var(--lcars-blue);
+  border-bottom-right-radius: var(--lcars-radius);
+  margin-left: 20px;
+}
+
+.lcars-status {
+  flex-grow: 1;
+  background-color: var(--lcars-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--lcars-black);
+  font-weight: bold;
+}
+
+/* Screen styling */
+.screen {
+  display: none;
+  height: 100%;
+}
+
+.screen.active {
+  display: block;
+}
+
+/* Recording screen */
+.recording-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  margin-top: 50px;
+}
+
+#recordingIndicator {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--lcars-blue);
+  margin-right: 20px;
+}
+
+#recordingIndicator.recording {
+  background-color: var(--lcars-orange);
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+#recordingTime {
+  font-size: 36px;
+  font-family: 'Courier New', monospace;
+}
+
+.recording-controls {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.lcars-control-button {
+  padding: 15px 30px;
+  font-size: 18px;
+  background-color: var(--lcars-orange);
+  border: none;
+  border-radius: 10px;
+  color: var(--lcars-black);
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.lcars-control-button:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+}
+
+/* Logs screen */
+.search-container {
+  margin-bottom: 20px;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #444;
+  color: white;
+}
+
+#logsList {
+  height: calc(100% - 100px);
+  overflow-y: auto;
+}
+
+.log-entry {
+  background-color: #333;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.log-entry:hover {
+  background-color: #444;
+}
+
+.log-date {
+  font-size: 12px;
+  color: var(--lcars-yellow);
+  margin-bottom: 5px;
+}
+
+.log-preview {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Settings screen */
+.settings-option {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+select, input[type="range"] {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #444;
+  color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .lcars-container {
+    padding: 10px;
+  }
+  
+  .lcars-corner {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .lcars-header, .lcars-footer {
+    height: 40px;
+  }
+  
+  .lcars-main {
+    flex-direction: column;
+  }
+  
+  .lcars-sidebar {
+    width: 100%;
+    flex-direction: row;
+    margin-bottom: 20px;
+    margin-right: 0;
+  }
+  
+  .lcars-button {
+    flex: 1;
+  }
+}

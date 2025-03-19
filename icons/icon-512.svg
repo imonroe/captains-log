@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#000000" />
+  
+  <!-- LCARS Outer Frame -->
+  <path d="M60,60 L452,60 Q452,60 452,60 L452,452 Q452,452 452,452 L60,452 Q60,452 60,452 L60,60 Q60,60 60,60 Z" fill="#FF9900" />
+  
+  <!-- Inner Screen Area -->
+  <rect x="85" y="85" width="342" height="342" rx="25" ry="25" fill="#000000" />
+  
+  <!-- Top LCARS Bar -->
+  <rect x="85" y="115" width="342" height="50" fill="#5599FF" />
+  
+  <!-- Bottom LCARS Bar -->
+  <rect x="85" y="345" width="342" height="50" fill="#FF9900" />
+  
+  <!-- Microphone Icon -->
+  <g transform="translate(256,256) scale(0.15)">
+    <path d="M256 32c53 0 96 43 96 96v160c0 53-43 96-96 96s-96-43-96-96V128c0-53 43-96 96-96zm0 344c18.3 0 34.5-3.1 48-8.8V432H176c-8.8 0-16 7.2-16 16s7.2 16 16 16h16c8.8 0 16 7.2 16 16s-7.2 16-16 16H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h16 48 32zm-64-184v96c0 35.3 28.7 64 64 64s64-28.7 64-64V192h-64v48c0 8.8-7.2 16-16 16s-16-7.2-16-16V192 128c0-8.8 7.2-16 16-16s16 7.2 16 16v32h64v-32c0-35.3-28.7-64-64-64s-64 28.7-64 64v96z" fill="#FFCC00" />
+  </g>
+  
+  <!-- LCARS Corner Elements -->
+  <circle cx="110" cy="110" r="30" fill="#FFCC00" />
+  <circle cx="402" cy="110" r="30" fill="#FFCC00" />
+  <circle cx="110" cy="402" r="30" fill="#5599FF" />
+  <circle cx="402" cy="402" r="30" fill="#5599FF" />
+</svg>

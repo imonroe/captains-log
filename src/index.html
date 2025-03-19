@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Captain's Log</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ff9900">
+  <meta name="description" content="Record and transcribe audio logs with a Star Trek-inspired interface">
+</head>
+<body>
+  <div class="lcars-container">
+    <header class="lcars-header">
+      <div class="lcars-corner top-left"></div>
+      <div class="lcars-title">CAPTAIN'S LOG</div>
+      <div class="lcars-corner top-right"></div>
+    </header>
+    
+    <main class="lcars-main">
+      <div class="lcars-sidebar">
+        <div class="lcars-button" id="recordButton">RECORD</div>
+        <div class="lcars-button" id="logsButton">LOGS</div>
+        <div class="lcars-button" id="settingsButton">SETTINGS</div>
+      </div>
+      
+      <div class="lcars-content">
+        <div id="recordingScreen" class="screen active">
+          <div class="recording-status">
+            <div id="recordingIndicator"></div>
+            <div id="recordingTime">00:00:00</div>
+          </div>
+          <div class="recording-controls">
+            <button id="startRecording" class="lcars-control-button">START RECORDING</button>
+            <button id="stopRecording" class="lcars-control-button" disabled>STOP</button>
+          </div>
+        </div>
+        
+        <div id="logsScreen" class="screen">
+          <h2>Previous Logs</h2>
+          <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search logs...">
+          </div>
+          <div class="logs-actions">
+            <button id="clearAllLogsBtn" class="lcars-control-button delete">Clear All Logs</button>
+          </div>
+          <div id="logsList"></div>
+        </div>
+        
+        <div id="settingsScreen" class="screen">
+          <h2>Settings</h2>
+          
+          <div class="settings-section">
+            <h3>Transcription</h3>
+            <div class="settings-option">
+              <label for="openaiApiKey">OpenAI API Key:</label>
+              <div class="api-key-input">
+                <input type="password" id="openaiApiKey" placeholder="Enter your OpenAI API key">
+                <button id="toggleApiKey" type="button" class="lcars-control-button small">Show</button>
+              </div>
+              <div class="settings-help">Required for speech-to-text transcription using the Whisper API.</div>
+              <div class="settings-security-warning">
+                <strong>Security Notice:</strong> This API key will be stored locally in your browser and is sent directly to OpenAI from your browser. For additional security, consider using a restricted API key with limited usage.
+              </div>
+            </div>
+            <div class="settings-option">
+              <button id="saveApiKey" type="button" class="lcars-control-button">Save API Key</button>
+            </div>
+          </div>
+          
+          <div class="settings-section">
+            <h3>Audio</h3>
+            <div class="settings-option">
+              <label for="audioQuality">Audio Quality:</label>
+              <select id="audioQuality">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div class="settings-option">
+              <label for="silenceThreshold">Silence Removal Sensitivity:</label>
+              <input type="range" id="silenceThreshold" min="0" max="100" value="30">
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <footer class="lcars-footer">
+      <div class="lcars-corner bottom-left"></div>
+      <div class="lcars-status">STARDATE: <span id="stardate"></span></div>
+      <div class="lcars-corner bottom-right"></div>
+    </footer>
+  </div>
+  
+  <!-- Scripts are injected by webpack -->
+</body>
+</html>

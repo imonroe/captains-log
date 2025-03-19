@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Background (full square with no padding for maskable icon) -->
+  <rect width="512" height="512" fill="#FF9900" />
+  
+  <!-- Inner Screen Area (with safe zone consideration) -->
+  <rect x="106" y="106" width="300" height="300" rx="20" ry="20" fill="#000000" />
+  
+  <!-- LCARS Elements -->
+  <rect x="106" y="136" width="300" height="40" fill="#5599FF" />
+  <rect x="106" y="336" width="300" height="40" fill="#5599FF" />
+  
+  <!-- LCARS Corner Elements -->
+  <circle cx="126" cy="126" r="20" fill="#FFCC00" />
+  <circle cx="386" cy="126" r="20" fill="#FFCC00" />
+  <circle cx="126" cy="386" r="20" fill="#FFCC00" />
+  <circle cx="386" cy="386" r="20" fill="#FFCC00" />
+  
+  <!-- Centered "CL" Text with LCARS styling -->
+  <text x="256" y="270" font-family="Arial, sans-serif" font-size="120" font-weight="bold" text-anchor="middle" fill="#FFCC00">CL</text>
+  
+  <!-- Decorative LCARS horizontal bars -->
+  <rect x="156" y="286" width="200" height="10" fill="#5599FF" />
+  <rect x="176" y="306" width="160" height="10" fill="#FFCC00" />
+</svg>

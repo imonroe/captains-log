@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Captain's Log</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <div class="lcars-container">
+    <header class="lcars-header">
+      <div class="lcars-corner top-left"></div>
+      <div class="lcars-title">CAPTAIN'S LOG</div>
+      <div class="lcars-corner top-right"></div>
+    </header>
+    
+    <main class="lcars-main">
+      <div class="lcars-sidebar">
+        <div class="lcars-button" id="recordButton">RECORD</div>
+        <div class="lcars-button" id="logsButton">LOGS</div>
+        <div class="lcars-button" id="settingsButton">SETTINGS</div>
+      </div>
+      
+      <div class="lcars-content">
+        <div id="recordingScreen" class="screen active">
+          <div class="recording-status">
+            <div id="recordingIndicator"></div>
+            <div id="recordingTime">00:00:00</div>
+          </div>
+          <div class="recording-controls">
+            <button id="startRecording" class="lcars-control-button">START RECORDING</button>
+            <button id="stopRecording" class="lcars-control-button" disabled>STOP</button>
+          </div>
+        </div>
+        
+        <div id="logsScreen" class="screen">
+          <h2>Previous Logs</h2>
+          <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search logs...">
+          </div>
+          <div id="logsList"></div>
+        </div>
+        
+        <div id="settingsScreen" class="screen">
+          <h2>Settings</h2>
+          <div class="settings-option">
+            <label for="audioQuality">Audio Quality:</label>
+            <select id="audioQuality">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <div class="settings-option">
+            <label for="silenceThreshold">Silence Removal Sensitivity:</label>
+            <input type="range" id="silenceThreshold" min="0" max="100" value="30">
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <footer class="lcars-footer">
+      <div class="lcars-corner bottom-left"></div>
+      <div class="lcars-status">STARDATE: <span id="stardate"></span></div>
+      <div class="lcars-corner bottom-right"></div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

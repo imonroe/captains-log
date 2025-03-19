@@ -1,0 +1,9 @@
+/* This is a script to convert the SVG icons to PNG. Not executing now, but user can use it when necessary. */
+
+/*
+npm install svgexport -g
+svgexport /home/ian/code/captains-log/icons/icon-192.svg /home/ian/code/captains-log/icons/icon-192.png 1x
+svgexport /home/ian/code/captains-log/icons/icon-512.svg /home/ian/code/captains-log/icons/icon-512.png 1x
+*/
+
+// Alternatively, can use tools like Inkscape, ImageMagick, or online converters to convert SVG to PNG.
