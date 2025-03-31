@@ -7,7 +7,8 @@
   "type": "commonjs",
   "main": "app.js",
   "scripts": {
-    "start": "webpack serve --mode development",
+    "start": "node server.js",
+    "dev": "webpack serve --mode development",
     "build": "webpack --mode production",
     "build:dev": "webpack --mode development",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -21,12 +22,17 @@
     "lcars"
   ],
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "better-sqlite3": "^11.9.1",
     "core-js": "3",
+    "dotenv": "^16.4.5",
     "dotenv-webpack": "^8.1.0",
+    "express": "^4.19.2",
     "form-data": "^4.0.2",
     "knex": "^3.1.0",
+    "multer": "^1.4.5-lts.1",
     "openai": "^4.87.4",
+    "pg": "^8.11.4",
     "regenerator-runtime": "^0.14.1",
     "sharp": "^0.33.5",
     "svgexport": "^0.4.2",

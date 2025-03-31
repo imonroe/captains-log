@@ -9,10 +9,126 @@
   <meta name="description" content="Record and transcribe audio logs with a Star Trek-inspired interface">
 </head>
 <body>
-  <div class="lcars-container">
+  <!-- Auth Screens (Login/Register/Reset) -->
+  <div id="authContainer" class="auth-container">
+    <div class="lcars-auth-panel">
+      <div class="lcars-auth-header">
+        <div class="lcars-corner auth-top-left"></div>
+        <div class="lcars-title">CAPTAIN'S LOG</div>
+        <div class="lcars-corner auth-top-right"></div>
+      </div>
+      
+      <!-- Login Screen -->
+      <div id="loginScreen" class="auth-screen active">
+        <h2>LOGIN</h2>
+        <div class="auth-form">
+          <div class="form-group">
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" placeholder="Enter your password">
+          </div>
+          <div class="auth-message" id="loginMessage"></div>
+          <div class="auth-actions">
+            <button id="loginButton" class="lcars-control-button">LOGIN</button>
+          </div>
+          <div class="auth-links">
+            <a href="#" id="showRegisterLink">Create Account</a>
+            <a href="#" id="showForgotPasswordLink">Forgot Password</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Register Screen -->
+      <div id="registerScreen" class="auth-screen">
+        <h2>CREATE ACCOUNT</h2>
+        <div class="auth-form">
+          <div class="form-group">
+            <label for="registerName">Name</label>
+            <input type="text" id="registerName" placeholder="Enter your name">
+          </div>
+          <div class="form-group">
+            <label for="registerEmail">Email</label>
+            <input type="email" id="registerEmail" placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label for="registerPassword">Password</label>
+            <input type="password" id="registerPassword" placeholder="Create a password (min 8 characters)">
+          </div>
+          <div class="form-group">
+            <label for="registerPasswordConfirm">Confirm Password</label>
+            <input type="password" id="registerPasswordConfirm" placeholder="Confirm your password">
+          </div>
+          <div class="auth-message" id="registerMessage"></div>
+          <div class="auth-actions">
+            <button id="registerButton" class="lcars-control-button">CREATE ACCOUNT</button>
+          </div>
+          <div class="auth-links">
+            <a href="#" id="showLoginLink">Back to Login</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Forgot Password Screen -->
+      <div id="forgotPasswordScreen" class="auth-screen">
+        <h2>RESET PASSWORD</h2>
+        <div class="auth-form">
+          <div class="form-group">
+            <label for="resetEmail">Email</label>
+            <input type="email" id="resetEmail" placeholder="Enter your email">
+          </div>
+          <div class="auth-message" id="resetMessage"></div>
+          <div class="auth-actions">
+            <button id="resetButton" class="lcars-control-button">SEND RESET LINK</button>
+          </div>
+          <div class="auth-links">
+            <a href="#" id="backToLoginLink">Back to Login</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Reset Password Screen (shown after clicking email link) -->
+      <div id="setNewPasswordScreen" class="auth-screen">
+        <h2>SET NEW PASSWORD</h2>
+        <div class="auth-form">
+          <div class="form-group">
+            <label for="newPassword">New Password</label>
+            <input type="password" id="newPassword" placeholder="Enter new password (min 8 characters)">
+          </div>
+          <div class="form-group">
+            <label for="newPasswordConfirm">Confirm New Password</label>
+            <input type="password" id="newPasswordConfirm" placeholder="Confirm new password">
+          </div>
+          <div class="auth-message" id="newPasswordMessage"></div>
+          <div class="auth-actions">
+            <button id="setNewPasswordButton" class="lcars-control-button">SET NEW PASSWORD</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="lcars-auth-footer">
+        <div class="lcars-corner auth-bottom-left"></div>
+        <div class="lcars-status">STARDATE: <span id="authStardate"></span></div>
+        <div class="lcars-corner auth-bottom-right"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App (shown after login) -->
+  <div id="appContainer" class="lcars-container" style="display: none;">
     <header class="lcars-header">
       <div class="lcars-corner top-left"></div>
       <div class="lcars-title">CAPTAIN'S LOG</div>
+      <div class="user-info" id="userInfo">
+        <span id="userName"></span>
+        <button id="userMenuToggle" class="user-menu-toggle">▼</button>
+        <div id="userMenu" class="user-menu">
+          <div class="user-menu-item" id="profileMenuItem">Profile</div>
+          <div class="user-menu-item" id="logoutMenuItem">Logout</div>
+        </div>
+      </div>
       <div class="lcars-corner top-right"></div>
     </header>
     
@@ -80,6 +196,55 @@
             <div class="settings-option">
               <label for="silenceThreshold">Silence Removal Sensitivity:</label>
               <input type="range" id="silenceThreshold" min="0" max="100" value="30">
+            </div>
+          </div>
+        </div>
+        
+        <!-- User Profile Screen -->
+        <div id="profileScreen" class="screen">
+          <h2>User Profile</h2>
+          
+          <div class="settings-section">
+            <h3>Account Information</h3>
+            <div class="profile-form">
+              <div class="form-group">
+                <label for="profileName">Name</label>
+                <input type="text" id="profileName" placeholder="Your name">
+              </div>
+              <div class="form-group">
+                <label for="profileEmail">Email</label>
+                <input type="email" id="profileEmail" placeholder="Your email">
+              </div>
+              <div class="auth-message" id="profileMessage"></div>
+              <button id="saveProfileButton" class="lcars-control-button">Save Changes</button>
+            </div>
+          </div>
+          
+          <div class="settings-section">
+            <h3>Change Password</h3>
+            <div class="profile-form">
+              <div class="form-group">
+                <label for="currentPassword">Current Password</label>
+                <input type="password" id="currentPassword" placeholder="Enter current password">
+              </div>
+              <div class="form-group">
+                <label for="profileNewPassword">New Password</label>
+                <input type="password" id="profileNewPassword" placeholder="Enter new password (min 8 characters)">
+              </div>
+              <div class="form-group">
+                <label for="profileNewPasswordConfirm">Confirm New Password</label>
+                <input type="password" id="profileNewPasswordConfirm" placeholder="Confirm new password">
+              </div>
+              <div class="auth-message" id="passwordMessage"></div>
+              <button id="changePasswordButton" class="lcars-control-button">Change Password</button>
+            </div>
+          </div>
+          
+          <div class="settings-section">
+            <h3>Account Management</h3>
+            <div class="profile-form">
+              <button id="deleteAccountButton" class="lcars-control-button delete">Delete Account</button>
+              <div class="settings-help">Warning: This action is irreversible and will delete all of your logs and data.</div>
             </div>
           </div>
         </div>

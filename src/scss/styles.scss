@@ -11,6 +11,8 @@
   --lcars-lilac: #cc99cc;
   --lcars-radius: 20px;
   --lcars-button-height: 50px;
+  --lcars-error-red: #ff3333;
+  --lcars-success-green: #33cc66;
 }
 
 /* SCSS Variables for compilation */
@@ -23,6 +25,8 @@ $lcars-tan: var(--lcars-tan);
 $lcars-lilac: var(--lcars-lilac);
 $lcars-radius: var(--lcars-radius);
 $lcars-button-height: var(--lcars-button-height);
+$lcars-error-red: var(--lcars-error-red);
+$lcars-success-green: var(--lcars-success-green);
 
 // Reset
 * {
@@ -559,10 +563,136 @@ select, input[type="range"], input[type="text"], input[type="password"] {
     .log-audio {
       margin-bottom: 20px;
       
-      audio {
-        width: 100%;
+      .no-audio {
+        padding: 15px;
         background-color: #333;
         border-radius: 5px;
+        color: #999;
+        font-style: italic;
+        text-align: center;
+      }
+      
+      // Custom audio player
+      .audio-player-container {
+        background-color: #333;
+        border-radius: 5px;
+        overflow: hidden;
+        border-left: 3px solid $lcars-blue;
+        
+        .audio-player-controls {
+          display: flex;
+          align-items: center;
+          padding: 10px;
+          background-color: rgba($lcars-blue, 0.1);
+          
+          .play-pause-btn {
+            padding: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-size: 16px;
+          }
+          
+          .time-display {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 0 10px;
+            min-width: 70px;
+            
+            &.current-time {
+              color: $lcars-yellow;
+            }
+            
+            &.duration {
+              color: $lcars-tan;
+            }
+          }
+          
+          .audio-progress-container {
+            flex-grow: 1;
+            height: 15px;
+            position: relative;
+            
+            .audio-progress-bar {
+              width: 100%;
+              height: 100%;
+              background-color: #444;
+              border-radius: 10px;
+              cursor: pointer;
+              overflow: hidden;
+              
+              .audio-progress-filled {
+                height: 100%;
+                width: 0;
+                background: linear-gradient(to right, $lcars-blue, $lcars-orange);
+                border-radius: 10px;
+                transition: width 0.1s;
+              }
+            }
+          }
+          
+          .volume-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-left: 10px;
+            font-size: 16px;
+            padding: 8px;
+            position: relative;
+          }
+          
+          .volume-slider-container {
+            position: absolute;
+            bottom: -40px;
+            right: 0;
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 10;
+            border: 1px solid $lcars-blue;
+            width: 120px;
+            
+            .volume-slider {
+              width: 100%;
+              height: 10px;
+              appearance: none;
+              background: #444;
+              border-radius: 5px;
+              outline: none;
+              
+              &::-webkit-slider-thumb {
+                appearance: none;
+                width: 15px;
+                height: 15px;
+                border-radius: 50%;
+                background: $lcars-orange;
+                cursor: pointer;
+              }
+              
+              &::-moz-range-thumb {
+                width: 15px;
+                height: 15px;
+                border-radius: 50%;
+                background: $lcars-orange;
+                cursor: pointer;
+                border: none;
+              }
+            }
+          }
+        }
+        
+        .audio-visualizer {
+          width: 100%;
+          background-color: #222;
+          border-top: 1px solid #444;
+        }
       }
     }
     
@@ -591,18 +721,281 @@ select, input[type="range"], input[type="text"], input[type="password"] {
   }
 }
 
+// Authentication Styles
+.auth-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $lcars-black;
+  z-index: 2000;
+}
+
+.lcars-auth-panel {
+  width: 90%;
+  max-width: 500px;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  
+  .lcars-auth-header {
+    display: flex;
+    height: 70px;
+    margin-bottom: 20px;
+    
+    .lcars-title {
+      flex-grow: 1;
+      background-color: $lcars-orange;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: $lcars-black;
+      letter-spacing: 2px;
+    }
+    
+    .auth-top-left {
+      background-color: $lcars-orange;
+      border-top-left-radius: $lcars-radius;
+      margin-right: 20px;
+      width: 70px;
+      height: 70px;
+    }
+    
+    .auth-top-right {
+      background-color: $lcars-orange;
+      border-top-right-radius: $lcars-radius;
+      margin-left: 20px;
+      width: 70px;
+      height: 70px;
+    }
+  }
+  
+  .lcars-auth-footer {
+    display: flex;
+    height: 50px;
+    margin-top: auto;
+    
+    .lcars-status {
+      flex-grow: 1;
+      background-color: $lcars-blue;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: $lcars-black;
+      font-weight: bold;
+    }
+    
+    .auth-bottom-left {
+      background-color: $lcars-blue;
+      border-bottom-left-radius: $lcars-radius;
+      margin-right: 20px;
+      width: 50px;
+      height: 50px;
+    }
+    
+    .auth-bottom-right {
+      background-color: $lcars-blue;
+      border-bottom-right-radius: $lcars-radius;
+      margin-left: 20px;
+      width: 50px;
+      height: 50px;
+    }
+  }
+}
+
+.auth-screen {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #222;
+  border-radius: 10px;
+  color: white;
+  display: none;
+  
+  &.active {
+    display: block;
+  }
+  
+  h2 {
+    color: $lcars-orange;
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: 2px;
+  }
+}
+
+.auth-form {
+  max-width: 400px;
+  margin: 0 auto;
+  
+  .form-group {
+    margin-bottom: 20px;
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: $lcars-yellow;
+      font-weight: bold;
+    }
+    
+    input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #444;
+      color: white;
+      font-size: 16px;
+      
+      &:focus {
+        outline: 2px solid $lcars-blue;
+      }
+    }
+  }
+  
+  .auth-actions {
+    margin: 30px 0 20px;
+    
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 18px;
+    }
+  }
+  
+  .auth-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    
+    a {
+      color: $lcars-blue;
+      text-decoration: none;
+      
+      &:hover {
+        color: $lcars-orange;
+        text-decoration: underline;
+      }
+    }
+  }
+  
+  .auth-message {
+    min-height: 20px;
+    color: $lcars-error-red;
+    font-size: 14px;
+    text-align: center;
+    
+    &.success {
+      color: $lcars-success-green;
+    }
+  }
+}
+
+// User Menu Styles
+.user-info {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 80px;
+  top: 0;
+  height: 100%;
+  padding: 0 10px;
+  color: $lcars-black;
+  font-weight: bold;
+  
+  .user-menu-toggle {
+    background: none;
+    border: none;
+    color: $lcars-black;
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 12px;
+  }
+  
+  .user-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #333;
+    border: 1px solid $lcars-blue;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    display: none;
+    z-index: 100;
+    
+    &.active {
+      display: block;
+    }
+    
+    .user-menu-item {
+      padding: 10px 20px;
+      color: white;
+      cursor: pointer;
+      white-space: nowrap;
+      
+      &:hover {
+        background-color: $lcars-blue;
+        color: $lcars-black;
+      }
+    }
+  }
+}
+
+// Profile Screen Styles
+#profileScreen {
+  .profile-form {
+    max-width: 500px;
+    
+    .form-group {
+      margin-bottom: 20px;
+      
+      label {
+        display: block;
+        margin-bottom: 5px;
+        color: $lcars-yellow;
+      }
+      
+      input {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #444;
+        color: white;
+      }
+    }
+    
+    button {
+      margin-top: 10px;
+      
+      &.delete {
+        background-color: $lcars-error-red;
+        
+        &:hover {
+          background-color: #cc0000; /* Darker red */
+        }
+      }
+    }
+  }
+}
+
 // Responsive adjustments
 @media (max-width: 768px) {
   .lcars-container {
     padding: 10px;
   }
   
-  .lcars-corner {
+  .lcars-corner, .auth-top-left, .auth-top-right, .auth-bottom-left, .auth-bottom-right {
     width: 40px;
     height: 40px;
   }
   
-  .lcars-header, .lcars-footer {
+  .lcars-header, .lcars-footer, .lcars-auth-header, .lcars-auth-footer {
     height: 40px;
   }
   
@@ -630,6 +1023,19 @@ select, input[type="range"], input[type="text"], input[type="password"] {
       .lcars-title {
         font-size: 14px;
       }
+    }
+  }
+  
+  .user-info {
+    right: 50px;
+    font-size: 12px;
+  }
+  
+  .auth-form {
+    .auth-links {
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
     }
   }
 }

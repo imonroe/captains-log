@@ -30,20 +30,20 @@
 - [x] Design and create proper app icons for PWA
 - [x] Set up Webpack build system with SASS support
 - [x] Set up SQLite database for logs and transcriptions
-- [ ] Implement log detail view with audio playback
+- [x] Implement log detail view with audio playback
 
 ## To Do
 
 ### Authentication & User Management
-- [ ] Create login/signup screens
-- [ ] Implement secure authentication system
-- [ ] Add user profile management
-- [ ] Implement password recovery system
+- [x] Create login/signup screens
+- [x] Implement secure authentication system
+- [x] Add user profile management
+- [x] Implement password recovery system
 
 ### Cloud Integration
-- [ ] Set up backend server with RESTful API
-- [ ] Create cloud storage for audio files
-- [ ] Implement secure data transmission
+- [x] Set up backend server with RESTful API
+- [x] Create cloud storage for audio files
+- [x] Implement secure data transmission
 - [ ] Add user data synchronization across devices
 
 ### Transcription

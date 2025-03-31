@@ -94,6 +94,33 @@ function showLogDetail(log) {
     `;
   }
   
+  // Prepare advanced audio player HTML
+  const audioPlayerHtml = log.audioUrl ? 
+    `<div class="audio-player-container">
+      <div class="audio-player-controls">
+        <button class="play-pause-btn lcars-control-button" aria-label="Play">
+          <span class="play-icon">▶</span>
+          <span class="pause-icon" style="display:none;">❚❚</span>
+        </button>
+        <div class="time-display current-time">00:00:00</div>
+        <div class="audio-progress-container">
+          <div class="audio-progress-bar">
+            <div class="audio-progress-filled"></div>
+          </div>
+        </div>
+        <div class="time-display duration">${log.duration}</div>
+        <button class="volume-btn lcars-control-button" aria-label="Volume">
+          <span class="volume-icon">🔊</span>
+        </button>
+        <div class="volume-slider-container" style="display:none;">
+          <input type="range" class="volume-slider" min="0" max="1" step="0.05" value="1">
+        </div>
+      </div>
+      <canvas class="audio-visualizer" height="60"></canvas>
+      <audio src="${log.audioUrl}" preload="metadata"></audio>
+    </div>` : 
+    '<div class="no-audio">No audio available</div>';
+  
   modal.innerHTML = `
     <div class="lcars-modal-content">
       <div class="lcars-modal-header">
@@ -107,7 +134,7 @@ function showLogDetail(log) {
         <div class="log-duration">Duration: ${log.duration}</div>
         ${statusHtml}
         <div class="log-audio">
-          ${log.audioUrl ? `<audio controls src="${log.audioUrl}"></audio>` : 'No audio available'}
+          ${audioPlayerHtml}
         </div>
         <div class="log-transcript">${log.transcript}</div>
         <div class="log-actions">
@@ -123,17 +150,20 @@ function showLogDetail(log) {
   // Make modal visible
   setTimeout(() => modal.classList.add('active'), 10);
   
+  // Set up the audio player if it exists
+  if (log.audioUrl) {
+    setupAudioPlayer(modal, log);
+  }
+  
   // Add event listener to close button
   modal.querySelector('.lcars-modal-close').addEventListener('click', () => {
-    modal.classList.remove('active');
-    setTimeout(() => modal.remove(), 300); // Wait for animation to complete
+    cleanupModal(modal);
   });
   
   // Also close when clicking outside the modal content
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
-      modal.classList.remove('active');
-      setTimeout(() => modal.remove(), 300);
+      cleanupModal(modal);
     }
   });
   
@@ -152,8 +182,7 @@ function showLogDetail(log) {
           
           if (deleted) {
             // Close the modal
-            modal.classList.remove('active');
-            setTimeout(() => modal.remove(), 300);
+            cleanupModal(modal);
             
             // Refresh the logs view
             setupLogsView();
@@ -164,6 +193,185 @@ function showLogDetail(log) {
       }
     });
   }
+}
+
+// Set up the enhanced audio player with visualizer
+function setupAudioPlayer(modal, log) {
+  const audioElement = modal.querySelector('audio');
+  const playPauseBtn = modal.querySelector('.play-pause-btn');
+  const playIcon = modal.querySelector('.play-icon');
+  const pauseIcon = modal.querySelector('.pause-icon');
+  const progressBar = modal.querySelector('.audio-progress-bar');
+  const progressFilled = modal.querySelector('.audio-progress-filled');
+  const currentTimeDisplay = modal.querySelector('.current-time');
+  const durationDisplay = modal.querySelector('.duration');
+  const volumeBtn = modal.querySelector('.volume-btn');
+  const volumeSlider = modal.querySelector('.volume-slider');
+  const volumeSliderContainer = modal.querySelector('.volume-slider-container');
+  const canvas = modal.querySelector('.audio-visualizer');
+  
+  // Audio context for visualization
+  let audioContext = null;
+  let analyser = null;
+  let source = null;
+  // Store animationId on the modal element to access it during cleanup
+  modal.animationId = null;
+  
+  // Skip if audio player elements don't exist
+  if (!audioElement || !playPauseBtn) return;
+  
+  // Set initial volume
+  audioElement.volume = 1.0;
+  
+  // Initialize audio context when playing
+  function initAudioContext() {
+    if (audioContext) return; // Already initialized
+    
+    try {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioContext.createAnalyser();
+      analyser.fftSize = 256;
+      source = audioContext.createMediaElementSource(audioElement);
+      source.connect(analyser);
+      analyser.connect(audioContext.destination);
+      
+      // Start visualization
+      visualizeAudio();
+    } catch (err) {
+      console.error('Failed to initialize audio context:', err);
+    }
+  }
+  
+  // Visualize audio using canvas
+  function visualizeAudio() {
+    if (!analyser || !canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    const width = canvas.width;
+    const height = canvas.height;
+    
+    // Clear canvas
+    ctx.clearRect(0, 0, width, height);
+    
+    function draw() {
+      modal.animationId = requestAnimationFrame(draw);
+      
+      // Get frequency data
+      analyser.getByteFrequencyData(dataArray);
+      
+      // Clear canvas for new frame
+      ctx.clearRect(0, 0, width, height);
+      
+      // Draw visualization
+      const barWidth = (width / bufferLength) * 2.5;
+      let x = 0;
+      
+      // Use LCARS colors for visualization
+      const gradient = ctx.createLinearGradient(0, 0, 0, height);
+      gradient.addColorStop(0, '#ff9900'); // Orange
+      gradient.addColorStop(0.5, '#ffcc00'); // Yellow
+      gradient.addColorStop(1, '#5599ff'); // Blue
+      
+      for (let i = 0; i < bufferLength; i++) {
+        const barHeight = (dataArray[i] / 255) * height;
+        
+        ctx.fillStyle = gradient;
+        ctx.fillRect(x, height - barHeight, barWidth, barHeight);
+        
+        x += barWidth + 1;
+      }
+    }
+    
+    draw();
+  }
+  
+  // Update progress bar
+  function updateProgress() {
+    const percent = (audioElement.currentTime / audioElement.duration) * 100;
+    progressFilled.style.width = `${percent}%`;
+    
+    // Update current time display
+    const { formatTime } = require('./utils');
+    currentTimeDisplay.textContent = formatTime(audioElement.currentTime * 1000);
+  }
+  
+  // Play/pause toggle
+  playPauseBtn.addEventListener('click', () => {
+    if (audioElement.paused) {
+      audioElement.play();
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'inline';
+      initAudioContext(); // Initialize audio context on first play
+    } else {
+      audioElement.pause();
+      playIcon.style.display = 'inline';
+      pauseIcon.style.display = 'none';
+    }
+  });
+  
+  // Click on progress bar to seek
+  progressBar.addEventListener('click', (e) => {
+    const rect = progressBar.getBoundingClientRect();
+    const pos = (e.clientX - rect.left) / progressBar.offsetWidth;
+    audioElement.currentTime = pos * audioElement.duration;
+  });
+  
+  // Toggle volume controls
+  volumeBtn.addEventListener('click', () => {
+    volumeSliderContainer.style.display = volumeSliderContainer.style.display === 'none' ? 'block' : 'none';
+  });
+  
+  // Volume slider
+  volumeSlider.addEventListener('input', () => {
+    audioElement.volume = volumeSlider.value;
+    // Update volume icon based on level
+    const volumeIcon = modal.querySelector('.volume-icon');
+    if (audioElement.volume === 0) {
+      volumeIcon.textContent = '🔇';
+    } else if (audioElement.volume < 0.5) {
+      volumeIcon.textContent = '🔉';
+    } else {
+      volumeIcon.textContent = '🔊';
+    }
+  });
+  
+  // Update time and progress while playing
+  audioElement.addEventListener('timeupdate', updateProgress);
+  
+  // When audio ends
+  audioElement.addEventListener('ended', () => {
+    playIcon.style.display = 'inline';
+    pauseIcon.style.display = 'none';
+    progressFilled.style.width = '0%';
+    currentTimeDisplay.textContent = '00:00:00';
+  });
+  
+  // Set initial duration
+  audioElement.addEventListener('loadedmetadata', () => {
+    const { formatTime } = require('./utils');
+    durationDisplay.textContent = formatTime(audioElement.duration * 1000);
+  });
+}
+
+// Clean up modal resources
+function cleanupModal(modal) {
+  // Stop audio if playing
+  const audioElement = modal.querySelector('audio');
+  if (audioElement) {
+    audioElement.pause();
+  }
+  
+  // Cancel animation frame for visualizer if running
+  if (modal.animationId) {
+    cancelAnimationFrame(modal.animationId);
+    modal.animationId = null;
+  }
+  
+  // Close modal
+  modal.classList.remove('active');
+  setTimeout(() => modal.remove(), 300); // Wait for animation to complete
 }
 
 // Load logs from database

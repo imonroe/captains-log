@@ -7,14 +7,20 @@ const { setupRecording } = require('./recording');
 const { setupLogsView } = require('./logs');
 const { state, initializeUI, loadLogs, clearAllLogs } = require('./store');
 const { loadApiKey, saveApiKey, isApiKeyConfigured } = require('./services/settings');
+const { initAuthUI } = require('./auth-ui');
+const { getCurrentUser } = require('./database');
 
 // Initialize the application
 function init() {
   console.log('Initializing Captain\'s Log application...');
   
-  // Initialize DOM references
+  // Initialize Auth UI first
+  initAuthUI();
+  console.log('Auth UI initialized');
+  
+  // Initialize DOM references for main app UI
   initializeUI();
-  console.log('UI initialized');
+  console.log('App UI initialized');
   
   // Display current stardate (Star Trek style date)
   updateStardate();
